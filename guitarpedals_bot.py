@@ -5,7 +5,7 @@ import time
 import pytz
 
 # Domains that are checked
-DOMAINS = ["imgur", "i.redd.it", "instagram"]
+DOMAINS = ["imgur", "i.redd.it", "instagram", "youtube", "youtu.be"]
 
 # Time limits (in minutes)
 TIME_WARN = 20
@@ -38,7 +38,8 @@ def log(submission, message):
     print("## Thread '" + submission.title + "' by /u/" + submission.author.name + ": " + message)
 
 def getSubCommentAuthors(comment, comment_authors):
-    comment_authors.append(comment.author.name)
+    if isinstance(comment, MoreComments) == False and comment.author is not None:
+        comment_authors.append(comment.author.name)
     
     if not hasattr(comment, "replies"):
         replies = comment.comments()
