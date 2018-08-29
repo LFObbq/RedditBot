@@ -3,6 +3,7 @@ import praw
 import datetime
 import time
 import pytz
+from praw.models import MoreComments
 
 # Domains that are checked
 DOMAINS = ["imgur", "i.redd.it", "instagram", "youtube", "youtu.be"]
