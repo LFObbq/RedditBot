@@ -84,7 +84,7 @@ def submission_checker(submission, USERNAME):
             
             # Edit bot comment with reason for removal
             for comment in submission.comments:
-                if comment.author.name == USERNAME:
+                if comment.author is not None and comment.author.name == USERNAME:
                     comment.edit(comment.body + "  \n\nEDIT: Post removed (R1: We are not an instagram feed)")
         elif thread_age > TIME_WARN:
             # Post warning message after TIME_WARN has passed
@@ -95,7 +95,7 @@ def submission_checker(submission, USERNAME):
     else:
         # Remove bot message if OP has replied
         for comment in submission.comments:
-            if comment.author.name == USERNAME:
+            if comment.author is not None and comment.author.name == USERNAME:
                 log (submission, "OP replied -> remove warning message!")
                 comment.delete()
                 
