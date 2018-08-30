@@ -36,7 +36,8 @@ def main():
         
         
 def log(submission, message):
-    print("## Thread '" + submission.title + "' by /u/" + submission.author.name + ": " + message)
+    title = (submission.title[:40] + " (...)") if len(submission.title) > 40 else submission.title
+    print(datetime.datetime.now(pytz.utc).strftime("%Y-%m-%d %H:%M:%S") + " ## Thread '" + title + "' by /u/" + submission.author.name + ": " + message)
 
 def getSubCommentAuthors(comment, comment_authors):
     if isinstance(comment, MoreComments) == False and comment.author is not None:
