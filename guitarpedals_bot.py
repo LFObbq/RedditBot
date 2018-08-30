@@ -6,7 +6,7 @@ import pytz
 from praw.models import MoreComments
 
 # Domains that are checked
-DOMAINS = ["imgur", "i.redd.it", "instagram", "youtube", "youtu.be"]
+DOMAINS = ["imgur", "i.redd.it", "v.redd.it", "instagram", "youtube", "youtu.be"]
 
 # Time limits (in minutes)
 TIME_WARN = 20
