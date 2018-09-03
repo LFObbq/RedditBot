@@ -3,14 +3,16 @@ import praw
 import datetime
 import time
 import pytz
+import os
+import daemon
 from praw.models import MoreComments
 
 # Domains that are checked
 DOMAINS = ["imgur", "i.redd.it", "v.redd.it", "instagram", "youtube", "youtu.be"]
 
 # Time limits (in minutes)
-TIME_WARN = 20
-TIME_REMOVE = 60
+TIME_WARN = 15
+TIME_REMOVE = 30
 TIME_BOTSLEEP = 1
 
 SUBREDDIT = "guitarpedals"
@@ -24,7 +26,6 @@ def main():
                         username=USERNAME,
                         user_agent="Guitarpedals Bot v0.1")
 
-     
     # Active Subreddit for the bot
     target_subreddit = reddit.subreddit(SUBREDDIT)
 
@@ -102,5 +103,16 @@ def submission_checker(submission, USERNAME):
                 comment.delete()
                 
 # main loop
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    print("*--------------------------*")
+    print("* /r/guitarpedals BOT v0.1 *")
+    print("*--------------------------*")
+    print("Starting python daemon...") 
+    print("working_directory=" + curr_path)
+    print("stdout=guitarpedals_bot.log")
+
+    curr_path = os.path.dirname(os.path.abspath(__file__))
+    out = open("guitarpedals_bot.log", "w+")
+
+    with daemon.DaemonContext(working_directory=curr_path, stdout=out):
+        main()
