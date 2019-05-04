@@ -8,15 +8,15 @@ import daemon
 from praw.models import MoreComments
 
 # Domains that are checked
+# SHOULD THIS CHECK ALL LINK POSTS INSTEAD OF JUST SPECIFIC LINKS? WHAT IS THE WILDCARD FUNCTION IN THIS CONTEXT?
 DOMAINS = ["imgur", "i.redd.it", "v.redd.it", "instagram", "youtube", "youtu.be"]
 
 # Time limits (in minutes)
 TIME_WARN = 15
-TIME_REMOVE = 30
 TIME_BOTSLEEP = 1
 
-SUBREDDIT = "guitarpedals"
-USERNAME = "guitarpedals_bot"
+SUBREDDIT = "synthesizersbottest"
+USERNAME = "synthesizers_bot"
 
 def main():
     # Authenticate Reddit bot. Needs API client_id and client_secret
@@ -24,7 +24,7 @@ def main():
                         client_secret="",
                         password="",
                         username=USERNAME,
-                        user_agent="Guitarpedals Bot v0.1")
+                        user_agent="Synthesizers Bot v0.1")
 
     # Active Subreddit for the bot
     target_subreddit = reddit.subreddit(SUBREDDIT)
@@ -78,22 +78,14 @@ def submission_checker(submission, USERNAME):
     # Add all current commenters to the list
     for top_level_comment in submission.comments:
         getSubCommentAuthors(top_level_comment, comment_authors)
-    
+
+# SEE BELOW. I DON'T KNOW WHETHER THE NESTED IF STATEMENTS ARE VALID. SORRY I'M A BIT RUSTY.
     if submission.author not in comment_authors:
-        if thread_age > TIME_REMOVE:
-            # Submission removed after TIME_REMOVE has passed
-            log(submission, "" + str(TIME_REMOVE) + " minutes expired -> remove submission!")
-            submission.mod.remove()
-            
-            # Edit bot comment with reason for removal
-            for comment in submission.comments:
-                if comment.author is not None and comment.author.name == USERNAME:
-                    comment.edit(comment.body + "  \n\nEDIT: Post removed (R1: We are not an instagram feed)")
-        elif thread_age > TIME_WARN:
+        if thread_age > TIME_WARN:
             # Post warning message after TIME_WARN has passed
             if USERNAME not in comment_authors:
                 log(submission, "" + str(TIME_WARN) + " minutes expired -> Reply to submission with warning message!") 
-                reply = submission.reply("**Thanks for your submission to /r/" + SUBREDDIT + "!**  \n\n**Don't forget to post your thoughts in the comments, it's required!** We love reading them and it helps facilitate discussion.  \n\nCheck out our [**subreddit rules here**](https://www.reddit.com/r/" + SUBREDDIT + "/wiki/rules). It's always good to familiarize yourself with them for the best possible experience. These can also be found in our sidebar.  \n\n***  \n\n\n*I am a bot, and this action was performed automatically. Please [contact the moderators of this subreddit](/message/compose/?to=/r/" + SUBREDDIT + ") if you have any questions or concerns.*")
+                reply = submission.reply("**Friendly reminder: please leave a thoughtful comment. (rule 5).**  \n\n*I am a bot, and this action was performed automatically. Please [contact the moderators of this subreddit](/message/compose/?to=/r/" + SUBREDDIT + ") if you have any questions or concerns.*")
                 reply.mod.distinguish(how='yes', sticky=True)
     else:
         # Remove bot message if OP has replied
@@ -105,14 +97,14 @@ def submission_checker(submission, USERNAME):
 # main loop
 if __name__ == "__main__":
     print("*--------------------------*")
-    print("* /r/guitarpedals BOT v0.1 *")
+    print("* /r/synthesizers BOT v0.1 *")
     print("*--------------------------*")
     print("Starting python daemon...") 
     print("working_directory=" + curr_path)
-    print("stdout=guitarpedals_bot.log")
+    print("stdout=synthesizers_bot.log")
 
     curr_path = os.path.dirname(os.path.abspath(__file__))
-    out = open("guitarpedals_bot.log", "w+")
+    out = open("synthesizers_bot.log", "w+")
 
     with daemon.DaemonContext(working_directory=curr_path, stdout=out):
         main()
